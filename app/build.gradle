@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "24.0.0 rc3"
+
+    defaultConfig {
+        applicationId "com.example.root.habbits"
+        //actionBar是3.0之后才有的，所以这里设置为最小13，否则报空指针异常
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //因为在程序的libs里引用了so库，在eclipse里可以直接用so库，但是AS里要添加这一句
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']  // <-- Set your folder here!
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //报错：XmlPullParserException:<vector> tag requires viewportWidth > 0
+    //解决办法是加上下边两行，其实加第二行就行，注意那个版本号很重要
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    //给jar包添加依赖
+    compile files('libs/jpush-android-2.1.5.jar')
+}
