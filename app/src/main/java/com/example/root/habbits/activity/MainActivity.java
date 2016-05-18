@@ -41,6 +41,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         activityName.add("极光推送测试");
         activityName.add("ActionBar测试");
+        activityName.add("简易通讯录");
+        activityName.add("NDK简单测试");
+        activityName.add("ToolBar测试");
+        activityName.add("DrawerLayout + TabLayout + ViewPager测试");
+        activityName.add("获取联系人测试 + 获取包名");
+        activityName.add("身份证查询");
         activityList.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,activityName));
 
 
@@ -67,6 +73,31 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 intent = new Intent(this,ActionBarTestActivity.class);
                 startActivity(intent);
                 break;
+            case "简易通讯录":
+                intent = new Intent(this,MyCallActivity.class);
+                startActivity(intent);
+                break;
+            case "NDK简单测试":
+                intent = new Intent(this,NDKTestActivity.class);
+                startActivity(intent);
+                break;
+            case "ToolBar测试":
+                intent = new Intent(this,ToolBarTestActivity.class);
+                startActivity(intent);
+                break;
+            case "DrawerLayout + TabLayout + ViewPager测试":
+                intent = new Intent(this,DrawerLayoutActivity.class);
+                startActivity(intent);
+                break;
+            case "获取联系人测试 + 获取包名":
+                intent = new Intent(this,GetContactActivity.class);
+                startActivity(intent);
+                break;
+            case "身份证查询":
+                intent = new Intent(this,IdQueryActivity.class);
+                startActivity(intent);
+                break;
+
         }
 
     }

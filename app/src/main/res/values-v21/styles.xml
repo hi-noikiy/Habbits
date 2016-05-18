@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <!--黑色的ActionBar，白色的背景-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ToolBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+</resources>

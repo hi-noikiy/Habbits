@@ -1,22 +1,31 @@
 package com.example.root.habbits.activity;
 
 
+import android.app.Activity;
 import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 import android.view.ViewConfiguration;
-import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.example.root.habbits.MyApplication;
 import com.example.root.habbits.R;
+import com.example.root.habbits.fragment.Fragment01;
+import com.example.root.habbits.fragment.Fragment02;
 
 import java.lang.reflect.Field;
 
@@ -39,6 +48,20 @@ public class ActionBarTestActivity extends ActionBarActivity {
 
         //因为机型不同，有的手机有物理menu的话，就不显示overFlow
         setOverFlowAlwaysShow();
+
+        //开启tab导航模式并且添加tab
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.Tab tab = actionBar
+                .newTab()
+                .setText("Tab01")
+                .setTabListener(new TabListener<Fragment01>("Fragment01",this, Fragment01.class));
+        actionBar.addTab(tab);
+
+        tab = actionBar
+                .newTab()
+                .setText("Tab02")
+                .setTabListener(new TabListener<Fragment02>("Fragment02",this, Fragment02.class));
+        actionBar.addTab(tab);
     }
 
     /**
@@ -75,7 +98,8 @@ public class ActionBarTestActivity extends ActionBarActivity {
         //参考：http://zhidao.baidu.com/link?url=9p-69IGVwy4_Zpsvc7Xi9Nx_f4i43ypC6-gIWolZ0Ej2ed-zmYEv9B2L2lD7tiD1UJwimdbmHRe5Q8TVTGzQQsV0f36xpPZmdAe7G8vkTqG
         //我擦啊，这个问题困扰了我好久，其实是导包问题
         //ShareActionProvider在widget包里和support.v7.widget都有，ActionProvider是support.v4包里的,真混乱
-        ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        MyActionProvider provider = (MyActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        //provider.setContext(this);
         provider.setShareIntent(getDefaultIntent());
 
 
@@ -94,8 +118,6 @@ public class ActionBarTestActivity extends ActionBarActivity {
                 return true;
             }
         });
-
-
 
         //擦，忘了加super，然后无限递归栈溢出了
         return super.onCreateOptionsMenu(menu);
@@ -142,6 +164,101 @@ public class ActionBarTestActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+    }
+}
+
+
+/**
+ * 自定义了一个ActionProvider继承自ShareActionProvider(v7包的那个)
+ * 思考：overFlow是不是一个重写的ActionProvider？
+ */
+class MyActionProvider extends ShareActionProvider{
+    private final String TAG = "MyActionProvider";
+
+    /**
+     * Creates a new instance. ActionProvider classes should always implement a
+     * constructor that takes a single Context parameter for inflating from menu XML.
+     *
+     * @param context Context for accessing resources.
+     */
+    public MyActionProvider(Context context) {
+        //调用父类构造方法用在第一句
+        super(context);
+    }
+
+    @Override
+    public View onCreateActionView() {
+        return null;
+    }
+
+    @Override
+    public void onPrepareSubMenu(SubMenu subMenu) {
+        subMenu.clear();
+        subMenu.add("子菜单01")
+                .setIcon(R.drawable.ic_launcher)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        //我傻了，点击这个按钮不弹出Toast，最初以为是context的问题，自己定义了一个Application，但是后来发现原来是忘了加show
+                        Toast.makeText(MyApplication.getContext(), "子菜单01被点击了", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+        subMenu.add("子菜单02")
+                .setIcon(R.drawable.ic_launcher)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(MyApplication.getContext(), "子菜单02被点击了", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+    }
+
+    @Override
+    public boolean hasSubMenu() {
+        return true;
+    }
+}
+
+/**
+ * Tab的监听器
+ * @param <T>
+ */
+class TabListener<T extends Fragment> implements ActionBar.TabListener {
+    //这个Fragment是v4包里的Fragment
+    private Fragment mFragment;
+    private final String tag;
+    private final Activity mActivity;
+    private final Class<T> mClass;
+
+    TabListener(String tag, Activity mActivity, Class<T> mClass) {
+        this.tag = tag;
+        this.mActivity = mActivity;
+        this.mClass = mClass;
+    }
+
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        if(mFragment == null){
+            mFragment = Fragment.instantiate(mActivity,mClass.getName());
+            ft.add(android.R.id.content,mFragment,tag);
+        }else{
+            //不为空直接attach
+            ft.attach(mFragment);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        if(mFragment != null)
+            ft.detach(mFragment);
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
     }
 }

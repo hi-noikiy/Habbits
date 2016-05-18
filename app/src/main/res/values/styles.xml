@@ -1,8 +1,32 @@
 <resources>
 
     <!-- Base application theme. -->
+    <!--黑色的ActionBar，白色的背景-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
 
+    <!--使用Android 21 的属性的时候不用加前缀-->
+    <style name="ToolBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#2e8abb</item><!--浅蓝色-->
+        <item name="colorPrimaryDark">#3A5FCD</item><!--深蓝色只有android5.0以上有效，哭-->
+        <item name="android:textColorSecondary">#ffffff</item>
+    </style>
+
+    <!--一个是改变overflow的颜色，一个是改变overflow的位置，但是安卓5.0+才能用，android4.4的用不了-->
+    <style name="ToolBarPopupTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="android:colorBackground">#000000</item>
+        <item name="actionOverflowMenuStyle">@style/MyOverFlowMenuStyle</item>
+    </style>
+    <style name="MyOverFlowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <style name="DrawerLayoutTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#3f51b5</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowToggle</item>
+    </style>
+    <style name="DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
 </resources>

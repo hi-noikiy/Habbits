@@ -14,10 +14,11 @@
         android:icon="@drawable/ic_launcher"
         />
 
+    <!--app:actionProviderClass="android.support.v7.widget.ShareActionProvider"-->
     <item
         android:id="@+id/action_share"
         android:title="分享"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        app:actionProviderClass="com.example.root.habbits.activity.MyActionProvider"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_launcher"
         />

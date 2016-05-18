@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "24.0.0 rc3"
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         applicationId "com.example.root.habbits"
@@ -11,6 +11,14 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        //在这里添加ndk信息
+        ndk{
+            //生成的so文件的名称，生成的so文件会自己带着lib前缀
+            moduleName "hellondk"
+            //生成so文件的文件夹
+            abiFilters "armeabi","armeabi-v7a"
+        }
     }
     buildTypes {
         release {
